@@ -7,7 +7,7 @@ import com.test.backend.poliza.domain.prima.Prima;
 import com.test.backend.poliza.domain.prima.PrimaRepository;
 import com.test.backend.poliza.domain.tipoIdentificacion.TipoIdentificacion;
 import com.test.backend.poliza.domain.tipoIdentificacion.TipoIdentificacionRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.test.backend.poliza.infra.erros.IntegrityValidation;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -15,18 +15,20 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AseguradoService {
-
   private final AseguradoRepository aseguradoRepository;
   private final AmparoRepository amparoRepository;
   private final PrimaRepository primaRepository;
+  private final TipoIdentificacionRepository tipoIdentificacionRepository;
 
-  public AseguradoService(AseguradoRepository aseguradoRepository, AmparoRepository amparoRepository, PrimaRepository primaRepository) {
+  public AseguradoService(AseguradoRepository aseguradoRepository, AmparoRepository amparoRepository, PrimaRepository primaRepository, TipoIdentificacionRepository tipoIdentificacionRepository) {
     this.aseguradoRepository = aseguradoRepository;
     this.amparoRepository = amparoRepository;
     this.primaRepository = primaRepository;
+    this.tipoIdentificacionRepository = tipoIdentificacionRepository;
   }
 
   public AseguradoResponse liquidarPoliza(DataAsegurado dataAsegurado) {
@@ -35,7 +37,21 @@ public class AseguradoService {
       throw new IllegalArgumentException("Valor asegurado debe ser mayor a cero.");
     }
 
-    Asegurado asegurado = aseguradoRepository.findByNroIdentificacion(String.valueOf(dataAsegurado.nroIdentificacion()));
+    Optional<TipoIdentificacion> tipoIdentificacion = tipoIdentificacionRepository.findById(
+      dataAsegurado.tipoIdentificacion()
+    );
+
+    if (tipoIdentificacion == null) {
+      throw new IntegrityValidation("El tipo de identificacion ingresado no existe");
+    }
+
+    Asegurado asegurado = aseguradoRepository.findByIdentificacion(
+      tipoIdentificacion, String.valueOf(dataAsegurado.nroIdentificacion())
+    );
+
+    if (asegurado == null) {
+      throw new IntegrityValidation("El asegurado no fue encontrado.");
+    }
 
     int edad = calcularEdad(asegurado.getFechaNacimiento());
 

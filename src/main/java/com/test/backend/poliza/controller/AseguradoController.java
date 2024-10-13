@@ -3,6 +3,7 @@ package com.test.backend.poliza.controller;
 import com.test.backend.poliza.domain.asegurado.AseguradoResponse;
 import com.test.backend.poliza.domain.asegurado.AseguradoService;
 import com.test.backend.poliza.domain.asegurado.DataAsegurado;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,7 @@ public class AseguradoController {
 
   @PostMapping("/liquidar")
   @Transactional
-  public ResponseEntity<AseguradoResponse> liquidarPoliza(@RequestBody DataAsegurado dataAsegurado) {
+  public ResponseEntity<AseguradoResponse> liquidarPoliza(@RequestBody @Valid DataAsegurado dataAsegurado) {
     AseguradoResponse aseguradoResponse = aseguradoService.liquidarPoliza(dataAsegurado);
     return ResponseEntity.ok(aseguradoResponse);
   }

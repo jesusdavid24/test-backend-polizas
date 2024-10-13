@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public record AseguradoResponse(
-  String tipoIdentificacion,
+  Long tipoIdentificacion,
   String nroIdentificacion,
   int valorAsegurado,
   List<AmparoResponse> liquidacion,
