@@ -7,10 +7,12 @@ import com.test.backend.poliza.domain.prima.Prima;
 import com.test.backend.poliza.domain.prima.PrimaRepository;
 import com.test.backend.poliza.domain.tipoIdentificacion.TipoIdentificacion;
 import com.test.backend.poliza.domain.tipoIdentificacion.TipoIdentificacionRepository;
+import com.test.backend.poliza.infra.erros.IllegalArgument;
 import com.test.backend.poliza.infra.erros.IntegrityValidation;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ public class AseguradoService {
   public AseguradoResponse liquidarPoliza(DataAsegurado dataAsegurado) {
 
     if (dataAsegurado.valorAsegurado() <= 0) {
-      throw new IllegalArgumentException("Valor asegurado debe ser mayor a cero.");
+      throw new IllegalArgument("Valor asegurado debe ser mayor a cero.");
     }
 
     Optional<TipoIdentificacion> tipoIdentificacion = tipoIdentificacionRepository.findById(
@@ -65,12 +67,12 @@ public class AseguradoService {
       Prima prima = primaRepository.findByCodigoAmparo(amparo.getCodigo(), edad);
 
       BigDecimal porcentajePrima = BigDecimal.valueOf(prima.getPorcentajePrima());
-      BigDecimal valorPrima = calcularPrima(dataAsegurado.valorAsegurado(), porcentajePrima);
+      BigDecimal valorPrima = calcularPrima(dataAsegurado.valorAsegurado(), porcentajePrima)
+        .setScale(2, RoundingMode.HALF_UP);
 
       liquidacion.add(new AmparoResponse(amparo.getCodigo(), amparo.getNombre(), valorPrima));
 
-      valorTotal = valorTotal.add(valorPrima);
-
+      valorTotal = valorTotal.add(valorPrima).setScale(2, RoundingMode.HALF_UP);
     }
 
     return new AseguradoResponse(

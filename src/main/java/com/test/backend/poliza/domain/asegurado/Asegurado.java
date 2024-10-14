@@ -53,4 +53,27 @@ public class Asegurado {
     this.fechaNacimiento = fechaNacimiento;
   }
 
+  public void setTipoIdentificacion(TipoIdentificacion tipoIdentificacion) {
+    this.tipoIdentificacion = tipoIdentificacion;
+  }
+
+  public void setNroIdentificacion(String nroIdentificacion) {
+    this.nroIdentificacion = nroIdentificacion;
+  }
+
+  public void setApellidos(String apellidos) {
+    this.apellidos = apellidos;
+  }
+
+  public void setNombres(String nombres) {
+    this.nombres = nombres;
+  }
+
+  public void setSexo(Sexo sexo) {
+    this.sexo = sexo;
+  }
+
+  public void setFechaNacimiento(LocalDate fechaNacimiento) {
+    this.fechaNacimiento = fechaNacimiento;
+  }
 }

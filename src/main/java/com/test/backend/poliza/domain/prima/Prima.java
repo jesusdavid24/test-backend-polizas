@@ -28,4 +28,8 @@ public class Prima {
   private Integer edadMaxima;
 
   private  double porcentajePrima;
+
+  public void setPorcentajePrima(double porcentajePrima) {
+    this.porcentajePrima = porcentajePrima;
+  }
 }

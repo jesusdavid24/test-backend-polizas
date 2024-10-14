@@ -23,6 +23,11 @@ public class ErrorHandler {
   public ResponseEntity errorHandlerIntegrityValidation(Exception e) {
     return ResponseEntity.badRequest().body(e.getMessage());
   }
+  @ExceptionHandler(IllegalArgument.class)
+  public ResponseEntity errorIllegalArgumentException(Exception e) {
+    return ResponseEntity.badRequest().body(e.getMessage());
+  }
+
   private record DatosErrorValidacion(String field, String error) {
     public DatosErrorValidacion(FieldError error) {
       this(error.getField(), error.getDefaultMessage());
