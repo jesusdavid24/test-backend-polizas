@@ -33,8 +33,6 @@ incluyendo su tipo y número de identificación, y el valor asegurado, y devuelv
 - Códigos de Error Claros: Devuelve un código de estado HTTP 400 en caso de que falten campos en la solicitud o si los datos son inválidos.
 - Amparos Configurables: El sistema maneja diferentes coberturas de póliza como muerte accidental, desmembración, auxilio funerario y renta vitalicia.
 
-This API serves as the backbone for the foro_hub platform, ensuring secure and efficient management of user interactions and topic discussions.
-
 ## API de referencia
 
 #### Post Liquidaciones
@@ -195,7 +193,7 @@ curl -X 'POST' \
 
 ## Licensia
 
-[MIT](https://choosealicense.com/licenses/mit/)
+- [MIT](https://choosealicense.com/licenses/mit/)
 
 ## Conclusión
 
