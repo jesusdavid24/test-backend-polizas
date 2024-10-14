@@ -49,6 +49,18 @@ public class AseguradoControllerTest {
 
   @Test
   public void testLiquidarPoliza_ErrorMissingFields() throws Exception {
+    DataAsegurado dataAsegurado = new DataAsegurado(null, "1234567", null);
+
+    String jsonRequest = objectMapper.writeValueAsString(dataAsegurado);
+
+    mockMvc.perform(post("/api/asegurados/liquidar")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(jsonRequest))
+      .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  public void testLiquidarPoliza_ErrorValorAseguradoCero() throws Exception {
     DataAsegurado dataAsegurado = new DataAsegurado(1L, "1234567", 0);
 
     String jsonRequest = objectMapper.writeValueAsString(dataAsegurado);
